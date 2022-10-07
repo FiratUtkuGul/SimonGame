@@ -1,2 +1,2 @@
 # SimonGame
-# CSS by London App Brewery
+CSS by London App Brewery
