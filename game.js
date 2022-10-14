@@ -4,7 +4,9 @@ var gamePattern = [];
 var userChosenPattern = [];
 var level = 0;
 var isGameOver = false;
+var hasGameStarted = false;
 var checkAnswerIndex = 0;
+var highestScore = 0;
 
 function nextSequence() {
   //Incresing the Level
@@ -29,11 +31,13 @@ function playSound(name){
 
 //Animates and checks the user answer of the pressed button
 $(".btn").click(function() {
-   var userChosenColour = $(this).attr("id");
-   userChosenPattern.push(userChosenColour);
-   playSound($(this).attr("id"));
-   animatePress(userChosenColour);
-   checkAnswer(userChosenColour);
+  if(hasGameStarted){
+    var userChosenColour = $(this).attr("id");
+    userChosenPattern.push(userChosenColour);
+    playSound($(this).attr("id"));
+    animatePress(userChosenColour);
+    checkAnswer(userChosenColour);
+  }
 })
 
 //Animates the button when pressed
@@ -47,12 +51,13 @@ function animatePress(currentColour){
 //Controls the initial game start and starting over
 $(document).keydown(function(event) {
    if(level == 0 && event.key == "a"){
+     hasGameStarted = true;
      myTimeout = setTimeout(function() {
        nextSequence();
      }, 800);
      $("h1").text("Level " + level);
    }
-   if(level != 0 && isGameOver){
+   if(isGameOver){
      startOver();
    }
  });
@@ -78,6 +83,7 @@ function checkAnswer(userColour) {
       $("body").removeClass("game-over");
     }, 300);
     $("h1").text("Game Over, Press Any Key to Restart");
+    setHighestScore();
   }
 }
 
@@ -90,4 +96,12 @@ function startOver(){
     nextSequence();
   }, 800);
   $("h1").text("Level " + level);
+}
+
+//Checks the Highest Score
+function setHighestScore() {
+  if(level > highestScore){
+    $("h2").text("Highest Score : " + level);
+    highestScore = level;
+  }
 }
